@@ -4,9 +4,9 @@ from maze import Labyrinthe
 from ant import Ant
 
 pg.init()
-lab = Labyrinthe(5001)
+lab = Labyrinthe(101)
 t1 = pg.time.get_ticks()
-lab.generer2()
+lab.generer_iter()
 t2 = pg.time.get_ticks()
 
 print(f"{t2 - t1} ms")
