@@ -3,13 +3,11 @@ import pygame as pg
 from maze import Labyrinthe
 from ant import Ant
 
-lab = Labyrinthe(75)
-lab.generer()
-
+pg.init()
+lab = Labyrinthe(101)
+lab.generer_iter()
 ant = Ant(0, 0)
 
-
-pg.init()
 screen = pg.display.set_mode((840, 840))
 pg.display.set_caption("Maze")
 clock = pg.time.Clock()
