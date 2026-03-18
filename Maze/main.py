@@ -1,35 +1,32 @@
 import pygame as pg
-
 from maze import Labyrinthe
 from ant import Ant
+from viewport import Camera
+
+WINDOW_WIDTH, WINDOW_HEIGHT = 840, 840
 
 pg.init()
-lab = Labyrinthe(101)
-lab.generer_iter()
+lab = Labyrinthe(5001)
+lab.generer()
 ant = Ant(0, 0)
 
-screen = pg.display.set_mode((840, 840))
+screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pg.display.set_caption("Maze")
 clock = pg.time.Clock()
 
 offset_x, offset_y = 0, 0
 run = True
 is_dragging = False
+cam = Camera(WINDOW_WIDTH, WINDOW_HEIGHT)
+cam.offset_x, cam.offset_y = offset_x, offset_y 
+
 while run:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
+
         if event.type == pg.MOUSEWHEEL:
-            mouse_x, mouse_y = pg.mouse.get_pos()
-
-            world_m_x = (mouse_x - offset_x) / lab.tile_size
-            world_m_y = (mouse_y - offset_y) / lab.tile_size
-
-            lab.tile_size += event.y * 3
-            lab.tile_size = max(2, lab.tile_size)
-
-            offset_x = mouse_x - (world_m_x * lab.tile_size)
-            offset_y = mouse_y - (world_m_y * lab.tile_size)
+            cam.ajuster_zoom(event, lab)
 
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 3:
@@ -41,20 +38,17 @@ while run:
 
     if is_dragging:
         rel_x, rel_y = pg.mouse.get_rel()
-        offset_x += rel_x
-        offset_y += rel_y
-    time = pg.time.get_ticks()
-    if time % 1000 < 500:
+        cam.deplacer(rel_x, rel_y)
+
+    current_time = pg.time.get_ticks()
+    if current_time % 1000 < 500:
         ant.up(lab)
     else:
         ant.down(lab)
+
+    screen.fill((255, 255, 255))
+    cam.dessiner_labyrinthe(screen, lab)
+    pg.display.update()
     clock.tick(30)
 
-    lab.afficher(screen, offset_x, offset_y)
-    pg.display.update()
-
-if is_dragging:
-    rel_x, rel_y = pg.mouse.get_rel()
-    offset_x += rel_x
-    offset_y += rel_y
 pg.quit()
