@@ -25,6 +25,32 @@ class Labyrinthe:
                 self.creuser(x + dx // 2, y + dy // 2)
                 self.generer(nx, ny)
 
+    def generer2(self, x=1, y=1):
+        self.creuser(x, y)
+        pile = [(x, y)]
+        while pile:
+            cx, cy = pile[-1][0], pile[-1][1]
+            print(pile)
+            directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]
+            random.shuffle(directions)
+            
+            voisins = []
+            for dx, dy in directions:
+                nx, ny = cx + dx, cy + dy
+                if self.est_valide(nx, ny):
+                    voisins.append((nx, ny, dx, dy))
+            
+            if voisins:
+                nx, ny, dx, dy = random.choice(voisins)
+                
+                self.creuser(cx + dx // 2, cy + dy // 2)
+                self.creuser(nx, ny)
+                
+                pile.append((nx, ny))
+            else:
+                pile.pop()
+
+
     def afficher(self, surface, offx=0, offy=0):
         w, h = self.tile_size, self.tile_size
         surface.fill((255, 255, 255))
