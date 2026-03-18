@@ -5,11 +5,7 @@ from ant import Ant
 
 pg.init()
 lab = Labyrinthe(101)
-t1 = pg.time.get_ticks()
 lab.generer_iter()
-t2 = pg.time.get_ticks()
-
-print(f"{t2 - t1} ms")
 ant = Ant(0, 0)
 
 screen = pg.display.set_mode((840, 840))
