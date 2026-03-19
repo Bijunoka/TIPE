@@ -8,9 +8,9 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 840, 840
 
 # Initialisation
 pg.init()
-lab = Maze(5001)
+lab = Maze(21)
 lab.generate()
-ant = Ant(0, 0)
+ant = Ant(1, 1, lab)
 
 # Window setup
 screen = pg.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -22,6 +22,14 @@ run = True
 is_dragging = False
 cam = Camera(WINDOW_WIDTH, WINDOW_HEIGHT)
 cam.offset_x, cam.offset_y = offset_x, offset_y 
+
+# Definitions of the keys
+moves = {
+    pg.K_DOWN:  (0, 1),
+    pg.K_UP:    (0, -1),
+    pg.K_LEFT:  (-1, 0),
+    pg.K_RIGHT: (1, 0)
+}
 
 while run:
     # Events
@@ -41,6 +49,10 @@ while run:
         if event.type == pg.MOUSEBUTTONUP:
             if event.button == 3:
                 is_dragging = False
+
+        if event.type == pg.KEYDOWN:
+            if event.key in moves:
+                ant.move(lab, moves[event.key])
 
     if is_dragging:
         rel_x, rel_y = pg.mouse.get_rel()

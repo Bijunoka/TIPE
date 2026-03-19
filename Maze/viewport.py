@@ -51,8 +51,8 @@ class Camera:
             screen: screen to draw the maze on
             maze: maze object
         """
-        ts = maze.tile_size
         # Avoid floating point errors
+        ts = maze.tile_size
         draw_size = math.ceil(ts) 
         
         # Which part of the maze is visible
@@ -62,10 +62,11 @@ class Camera:
         start_y = max(0, int(-self.offset_y // ts))
         end_y = min(maze.n, int((self.height - self.offset_y) // ts) + 1)
 
+        colors = {1: (0, 0, 0), 2: (255, 0, 0), 3: (200, 200, 200)}
         # Draw the visible part of the maze
         for y in range(start_y, end_y):
             for x in range(start_x, end_x):
-                if maze.matrice[y][x] == 1:
-                    px = x * ts + self.offset_x
-                    py = y * ts + self.offset_y
-                    pg.draw.rect(screen, (0, 0, 0), (px, py, draw_size, draw_size))
+                val = maze.matrice[y][x]
+                if val in colors:
+                    px, py = x * ts + self.offset_x, y * ts + self.offset_y
+                    pg.draw.rect(screen, colors[val], (px, py, draw_size, draw_size))
